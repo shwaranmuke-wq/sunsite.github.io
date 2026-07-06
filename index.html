@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SunSite — Charls, The Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#fdf6ee;--cream2:#f5ebe0;--cream3:#ede0d4;
+  --leather:#8b5e3c;--leather2:#6b4226;--leather3:#4a2e1a;
+  --gold:#c8923a;--gold2:#e8b860;
+  --sky:#0EA5E9;--sky2:#38BDF8;
+  --ink:#1a0f08;--muted:#7a5c42;--faint:#b09070;
+  --rim:rgba(139,94,60,0.15);--rim2:rgba(139,94,60,0.3);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:'Syne',sans-serif;line-height:1.15;}
+a{color:inherit;text-decoration:none;}
+.page{display:none;} .page.active{display:block;}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(253,246,238,0.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--rim);}
+.nav-logo{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.nav-logo svg{width:34px;height:34px;}
+.nav-brand{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--leather2);}
+.nav-brand span{color:var(--sky);}
+.nav-links{display:flex;gap:2rem;}
+.nav-links a{font-size:13px;letter-spacing:.4px;color:var(--muted);text-transform:uppercase;transition:color .2s;cursor:pointer;}
+.nav-links a:hover{color:var(--leather2);}
+.nav-cta{background:var(--leather2);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;padding:.55rem 1.3rem;border-radius:6px;transition:background .2s;text-transform:uppercase;cursor:pointer;border:none;}
+.nav-cta:hover{background:var(--leather3);}
+
+.hero{min-height:100vh;display:flex;align-items:center;padding:7rem 3rem 4rem;position:relative;overflow:hidden;}
+.hero-img{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1600&q=80');background-size:cover;background-position:center;filter:brightness(0.18) sepia(0.4);}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(120deg,rgba(74,46,26,0.92) 0%,rgba(26,15,8,0.7) 60%,rgba(14,165,233,0.08) 100%);}
+.hero-content{max-width:680px;position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:var(--gold2);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:.4rem 1rem;border-radius:100px;margin-bottom:1.8rem;}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--gold2);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-size:clamp(2.8rem,5.5vw,5rem);font-weight:800;letter-spacing:-2px;line-height:1.06;margin-bottom:1.4rem;color:#fff;}
+.hero h1 .acc{color:var(--sky2);} .hero h1 .gacc{color:var(--gold2);}
+.hero-sub{font-size:1.05rem;color:rgba(255,255,255,.7);max-width:500px;line-height:1.85;margin-bottom:2.5rem;font-weight:300;}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem;}
+.btn-primary{background:var(--sky);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:.3px;padding:.8rem 1.8rem;border-radius:8px;transition:all .2s;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px;}
+.btn-primary:hover{background:var(--sky2);color:#000;transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:#fff;font-family:'Syne',sans-serif;font-weight:600;font-size:13px;padding:.8rem 1.8rem;border-radius:8px;border:1px solid rgba(255,255,255,.3);transition:all .2s;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08);}
+.hero-stats{display:flex;gap:2.5rem;}
+.stat-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;}
+.stat-num span{color:var(--sky2);}
+.stat-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.5px;text-transform:uppercase;}
+
+section{padding:5.5rem 3rem;}
+.section-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--leather);font-weight:600;margin-bottom:.8rem;}
+.section-label::before{content:'';display:block;width:20px;height:1px;background:var(--leather);}
+.section-title{font-size:clamp(1.8rem,3.5vw,2.7rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem;max-width:560px;color:var(--leather3);}
+.section-sub{font-size:.95rem;color:var(--muted);max-width:520px;line-height:1.85;margin-bottom:3rem;}
+
+#about{background:var(--cream2);}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.about-img-placeholder{width:100%;aspect-ratio:4/5;background:var(--cream3);border-radius:16px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+.about-img-placeholder img{width:100%;height:100%;object-fit:cover;border-radius:16px;}
+.about-badge{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--leather2);color:#fff;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:.5rem 1.2rem;border-radius:100px;white-space:nowrap;}
+.about-name{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--leather2);margin-bottom:.4rem;}
+.skill-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem;}
+.chip{background:var(--cream3);border:1px solid var(--rim2);color:var(--muted);font-size:12px;padding:.3rem .8rem;border-radius:100px;}
+
+#services{background:var(--cream);}
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;}
+.service-card{background:#fff;border:1px solid var(--rim);border-radius:14px;overflow:hidden;transition:all .3s;cursor:pointer;}
+.service-card:hover{border-color:var(--leather);transform:translateY(-4px);}
+.service-thumb{height:130px;overflow:hidden;}
+.service-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.service-card:hover .service-thumb img{transform:scale(1.05);}
+.service-body{padding:1.25rem;}
+.service-title{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--leather3);margin-bottom:.4rem;}
+.service-desc{font-size:.82rem;color:var(--muted);line-height:1.65;}
+
+#portfolio{background:var(--cream2);}
+.port-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.port-card{background:#fff;border:1px solid var(--rim);border-radius:14px;overflow:hidden;transition:all .3s;cursor:pointer;}
+.port-card:hover{border-color:var(--leather);transform:translateY(-4px);}
+.port-thumb{height:170px;overflow:hidden;position:relative;}
+.port-thumb img{width:100%;height:100%;object-fit:cover;}
+.port-label{position:absolute;bottom:10px;left:10px;background:rgba(74,46,26,.8);border:1px solid rgba(255,255,255,.15);font-size:10px;color:rgba(255,255,255,.9);letter-spacing:1px;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;}
+.port-info{padding:1.1rem;}
+.port-name{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;color:var(--leather3);margin-bottom:.25rem;}
+.port-type{font-size:.78rem;color:var(--muted);}
+
+#pricing{background:var(--cream);}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;}
+.price-card{background:#fff;border:1px solid var(--rim);border-radius:16px;padding:2rem 1.5rem;position:relative;transition:all .3s;}
+.price-card.featured{background:var(--leather2);border-color:var(--leather2);}
+.price-card.featured .plan-name,.price-card.featured .plan-period,.price-card.featured .plan-feat-item{color:rgba(255,255,255,.7);}
+.price-card.featured .plan-price{color:#fff;}
+.popular-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;padding:.25rem .9rem;border-radius:100px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;}
+.plan-name{font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;font-weight:600;}
+.plan-price{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;letter-spacing:-1.5px;color:var(--leather3);margin-bottom:.2rem;}
+.plan-price sup{font-size:1rem;font-weight:600;vertical-align:super;color:var(--leather);}
+.plan-period{font-size:.8rem;color:var(--muted);margin-bottom:1.5rem;}
+.plan-feats{list-style:none;margin-bottom:1.8rem;}
+.plan-feat-item{font-size:.82rem;color:var(--muted);padding:.45rem 0;border-bottom:1px solid var(--rim);display:flex;align-items:flex-start;gap:8px;line-height:1.4;}
+.plan-feat-item::before{content:'✓';color:var(--sky);font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.price-card.featured .plan-feat-item{border-bottom-color:rgba(255,255,255,.12);}
+.price-card.featured .plan-feat-item::before{color:var(--gold2);}
+.btn-leather{background:var(--leather2);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;padding:.7rem 1.2rem;border-radius:8px;transition:all .2s;cursor:pointer;border:none;display:block;width:100%;text-align:center;text-transform:uppercase;}
+.btn-leather:hover{background:var(--leather3);}
+.btn-leather-ghost{background:transparent;color:var(--leather2);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;padding:.7rem 1.2rem;border-radius:8px;border:1px solid var(--rim2);transition:all .2s;cursor:pointer;display:block;width:100%;text-align:center;text-transform:uppercase;}
+.btn-leather-ghost:hover{border-color:var(--leather2);}
+.btn-gold{background:var(--gold2);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;padding:.7rem 1.2rem;border-radius:8px;transition:all .2s;cursor:pointer;border:none;display:block;width:100%;text-align:center;text-transform:uppercase;}
+.btn-gold:hover{background:var(--gold);}
+
+#reviews{background:var(--cream2);}
+.reviews-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+.review-form{background:#fff;border:1px solid var(--rim);border-radius:16px;padding:2rem;}
+.rf-input{width:100%;background:var(--cream);border:1px solid var(--rim2);border-radius:8px;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:.9rem;padding:.75rem 1rem;outline:none;transition:border-color .2s;resize:none;margin-bottom:.8rem;}
+.rf-input:focus{border-color:var(--leather);}
+.stars-input{display:flex;gap:.4rem;margin-bottom:.8rem;}
+.star-btn{background:none;border:none;font-size:24px;cursor:pointer;color:var(--cream3);transition:color .1s;line-height:1;padding:0;}
+.star-btn.active{color:var(--gold);}
+.review-card{background:#fff;border:1px solid var(--rim);border-radius:12px;padding:1.5rem;margin-bottom:1rem;}
+.r-stars{color:var(--gold);font-size:13px;margin-bottom:.6rem;letter-spacing:2px;}
+.r-quote{font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:1rem;font-style:italic;}
+.r-author{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:var(--leather3);}
+.r-biz{font-size:.78rem;color:var(--faint);}
+.no-reviews{font-size:.9rem;color:var(--faint);font-style:italic;padding:1rem 0;}
+
+#faq{background:var(--cream);}
+.faq-wrap{max-width:700px;}
+.faq-item{border-bottom:1px solid var(--rim);}
+.faq-q{width:100%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:1.4rem 0;text-align:left;font-family:'Syne',sans-serif;font-size:.98rem;font-weight:700;color:var(--leather3);transition:color .2s;}
+.faq-q:hover{color:var(--leather);}
+.faq-icon{color:var(--leather);font-size:1.3rem;font-weight:300;transition:transform .3s;flex-shrink:0;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;font-size:.88rem;color:var(--muted);line-height:1.85;}
+.faq-item.open .faq-a{max-height:200px;}
+.faq-a-inner{padding-bottom:1.3rem;}
+
+#contact{background:var(--cream2);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+.contact-form-wrap{display:flex;flex-direction:column;gap:.9rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.cf-input{width:100%;background:#fff;border:1px solid var(--rim2);border-radius:8px;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:.9rem;padding:.8rem 1rem;outline:none;transition:border-color .2s;resize:none;}
+.cf-input::placeholder{color:var(--faint);}
+.cf-input:focus{border-color:var(--leather);}
+.contact-item{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.8rem;}
+.contact-icon{width:42px;height:42px;border-radius:10px;background:var(--cream3);border:1px solid var(--rim2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.contact-detail-title{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;color:var(--leather3);margin-bottom:.15rem;}
+.contact-detail-val{font-size:.85rem;color:var(--muted);}
+.contact-detail-val a{color:var(--sky);text-decoration:underline;}
+.free-audit{background:#fff;border:1px solid var(--rim);border-radius:12px;padding:1.5rem;margin-top:1rem;}
+.free-audit-title{font-family:'Syne',sans-serif;font-weight:800;color:var(--leather2);margin-bottom:.4rem;}
+
+.success-msg{display:none;background:#edf7ed;border:1px solid #a8d5a8;border-radius:8px;padding:1rem 1.25rem;color:#2e6b2e;font-size:.9rem;font-family:'Syne',sans-serif;font-weight:600;}
+.error-msg{display:none;background:#fdecea;border:1px solid #f5b4b0;border-radius:8px;padding:1rem 1.25rem;color:#c0392b;font-size:.9rem;font-family:'Syne',sans-serif;font-weight:600;}
+.btn-sending{opacity:.7;pointer-events:none;}
+
+footer{background:var(--leather3);padding:2rem 3rem;display:flex;align-items:center;justify-content:space-between;}
+.footer-brand{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:#fff;}
+.footer-brand span{color:var(--sky2);}
+.footer-copy{font-size:.78rem;color:rgba(255,255,255,.4);}
+.footer-links{display:flex;gap:1.5rem;}
+.footer-links a{font-size:.78rem;color:rgba(255,255,255,.5);transition:color .2s;cursor:pointer;}
+.footer-links a:hover{color:var(--gold2);}
+.sticky-cta-btn{position:fixed;bottom:1.5rem;right:1.5rem;z-index:99;background:var(--leather2);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;padding:.8rem 1.4rem;border-radius:100px;cursor:pointer;transition:all .2s;text-transform:uppercase;border:none;box-shadow:0 4px 20px rgba(74,46,26,.35);}
+.sticky-cta-btn:hover{background:var(--leather3);transform:translateY(-2px);}
+
+/* ===== PORTFOLIO PAGE ===== */
+.port-page-hero{background:var(--leather3);padding:5rem 3rem 4rem;position:relative;overflow:hidden;}
+.port-page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(14,165,233,.15),transparent 60%);}
+.port-back-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:.5rem 1.2rem;border-radius:100px;cursor:pointer;transition:all .2s;margin-bottom:2rem;position:relative;z-index:1;}
+.port-back-btn:hover{background:rgba(255,255,255,.15);}
+.port-page-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,4rem);font-weight:800;color:#fff;letter-spacing:-2px;margin-bottom:.8rem;position:relative;z-index:1;}
+.port-page-title span{color:var(--sky2);}
+.port-page-sub{font-size:1rem;color:rgba(255,255,255,.6);max-width:500px;line-height:1.8;position:relative;z-index:1;}
+.port-projects-section{padding:4rem 3rem;}
+.port-section-label{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--leather);margin-bottom:2rem;display:flex;align-items:center;gap:10px;}
+.port-section-label::after{content:'';flex:1;height:1px;background:var(--rim2);}
+
+.project-feature-card{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border:1px solid var(--rim);border-radius:20px;overflow:hidden;margin-bottom:2rem;transition:box-shadow .3s;}
+.project-feature-card:hover{box-shadow:0 8px 40px rgba(74,46,26,.1);}
+.project-screenshots{position:relative;background:var(--cream2);}
+.project-screenshots .main-shot{width:100%;height:300px;object-fit:cover;display:block;cursor:zoom-in;}
+.thumb-row{display:flex;gap:4px;padding:6px;background:var(--cream3);}
+.thumb-row img{flex:1;height:65px;object-fit:cover;border-radius:5px;cursor:pointer;transition:opacity .2s;border:2px solid transparent;}
+.thumb-row img:hover{opacity:.85;border-color:var(--leather);}
+.project-info{padding:2.5rem;}
+.proj-tag{display:inline-block;background:var(--cream2);border:1px solid var(--rim2);color:var(--leather);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem;}
+.proj-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--leather3);letter-spacing:-.5px;margin-bottom:.6rem;}
+.proj-desc{font-size:.9rem;color:var(--muted);line-height:1.85;margin-bottom:1.5rem;}
+.proj-tech{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem;}
+.tech-tag{background:var(--cream3);color:var(--leather2);font-size:11px;font-weight:600;padding:.25rem .7rem;border-radius:6px;}
+
+.port-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:3rem;}
+.port-mini-card{background:#fff;border:1px solid var(--rim);border-radius:14px;overflow:hidden;transition:all .3s;}
+.port-mini-card:hover{border-color:var(--leather);transform:translateY(-4px);}
+.port-mini-thumb{height:160px;overflow:hidden;}
+.port-mini-thumb img{width:100%;height:100%;object-fit:cover;}
+.port-mini-info{padding:1rem;}
+.port-mini-name{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;color:var(--leather3);margin-bottom:.2rem;}
+.port-mini-type{font-size:.78rem;color:var(--muted);}
+
+/* Purchase Modal */
+#purchaseModal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
+.modal-inner{background:#fff;border-radius:20px;padding:2.5rem;max-width:480px;width:90%;position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:var(--cream2);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;}
+</style>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('main')">
+    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(200,200)">
+        <polygon points="0,-100 87,-50 87,50 0,100 -87,50 -87,-50" fill="#0EA5E9"/>
+        <polygon points="0,-85 74,-42 74,42 0,85 -74,42 -74,-42" fill="none" stroke="#38BDF8" stroke-width="2.5" opacity="0.4"/>
+        <text x="0" y="32" text-anchor="middle" font-size="100" font-weight="700" fill="#ffffff" font-family="Arial">S</text>
+        <circle cx="47" cy="-47" r="18" fill="#FCD34D"/>
+        <line x1="47" y1="-69" x2="47" y2="-76" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+        <line x1="47" y1="-25" x2="47" y2="-18" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+        <line x1="69" y1="-47" x2="76" y2="-47" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+        <line x1="25" y1="-47" x2="18" y2="-47" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+        <line x1="62" y1="-62" x2="67" y2="-67" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+        <line x1="32" y1="-32" x2="27" y2="-27" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <div class="nav-brand"><span>Sun</span>Site</div>
+  </div>
+  <div class="nav-links">
+    <a onclick="navTo('about')">About</a>
+    <a onclick="navTo('services')">Services</a>
+    <a onclick="showPage('portfolio')">Work</a>
+    <a onclick="navTo('pricing')">Pricing</a>
+    <a onclick="navTo('reviews')">Reviews</a>
+    <a onclick="navTo('contact')">Contact</a>
+  </div>
+  <button class="nav-cta" onclick="navTo('contact')">Get a Quote</button>
+</nav>
+
+<!-- ===== MAIN PAGE ===== -->
+<div class="page active" id="mainPage">
+
+<section class="hero" id="home">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Websites · Automations · AI</div>
+    <h1>Built for<br><span class="acc">Business People</span><br>Who Mean <span class="gacc">Business.</span></h1>
+    <p class="hero-sub">I'm Charls (Mukeshwaran) — I build websites, automations, and AI-powered systems that save time and bring in real customers. No fluff. Just results.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="showPage('portfolio')">View My Work →</button>
+      <button class="btn-ghost" onclick="navTo('pricing')">See Packages</button>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">50<span>+</span></div><div class="stat-label">Sites Delivered</div></div>
+      <div><div class="stat-num">3<span>x</span></div><div class="stat-label">Avg Lead Increase</div></div>
+      <div><div class="stat-num">5<span>★</span></div><div class="stat-label">Client Rating</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <div class="about-img-placeholder">
+        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80" alt="Charls at work">
+        <div class="about-badge">Charls — The Builder</div>
+      </div>
+    </div>
+    <div>
+      <div class="section-label">About Me</div>
+      <div class="about-name">Mukeshwaran (Charls)</div>
+      <h2 class="section-title">I Don't Just Build Sites. I Build Systems Behind Successful Businesses.</h2>
+      <p style="color:var(--muted);line-height:1.9;margin-bottom:1rem;">Every serious business needs more than a pretty website. They need it to work — capturing leads, booking appointments, and running automations so the owner can focus on what matters.</p>
+      <p style="color:var(--muted);line-height:1.9;">That's what I build. Websites, AI automations, and integrated systems — all crafted clean, fast, and conversion-focused.</p>
+      <div class="skill-chips">
+        <span class="chip">Web Design</span>
+        <span class="chip">AI Automations</span>
+        <span class="chip">CRM Integration</span>
+        <span class="chip">E-Commerce</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-label">What I Do</div>
+  <h2 class="section-title">Four Things I Build Exceptionally Well</h2>
+  <p class="section-sub">Each service is purpose-built to help your business grow online.</p>
+  <div class="services-grid">
+    <div class="service-card" onclick="navTo('contact')">
+      <div class="service-thumb"><img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=400&q=80" alt="Website design"></div>
+      <div class="service-body"><div class="service-title">Websites</div><p class="service-desc">Fast, mobile-first, conversion-focused websites for businesses that want to be found and trusted online.</p></div>
+    </div>
+    <div class="service-card" onclick="navTo('contact')">
+      <div class="service-thumb"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80" alt="Automations"></div>
+      <div class="service-body"><div class="service-title">Automations</div><p class="service-desc">Workflow automations that handle bookings, follow-ups, reminders and reports — so you stop doing it manually.</p></div>
+    </div>
+    <div class="service-card" onclick="navTo('contact')">
+      <div class="service-thumb"><img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=400&q=80" alt="AI automations"></div>
+      <div class="service-body"><div class="service-title">AI Automations</div><p class="service-desc">AI-powered chatbots, lead qualifiers, content generators and smart assistants built into your business system.</p></div>
+    </div>
+    <div class="service-card" onclick="navTo('contact')">
+      <div class="service-thumb"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=80" alt="Web + Automations"></div>
+      <div class="service-body"><div class="service-title">Web + Automations</div><p class="service-desc">A redesigned website combined with automations, wired together into one seamless growth system.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="portfolio">
+  <div class="section-label">Portfolio</div>
+  <h2 class="section-title">Work That Speaks for Itself</h2>
+  <p class="section-sub">Real projects, real results — websites, AI systems, and automations built from scratch.</p>
+  <div class="port-grid">
+    <!-- NEW: Saveur Restaurant -->
+    <div class="port-card" onclick="showPage('portfolio')">
+      <div class="port-thumb"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Saveur Restaurant"><div class="port-label">Restaurant</div></div>
+      <div class="port-info"><div class="port-name">Saveur Restaurant & Bar</div><div class="port-type">Luxury dining website with reservations — Madurai</div></div>
+    </div>
+    <!-- NEW: Forge Gym -->
+    <div class="port-card" onclick="showPage('portfolio')">
+      <div class="port-thumb"><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80" alt="Forge Gym"><div class="port-label">Fitness</div></div>
+      <div class="port-info"><div class="port-name">Forge Elite Fitness</div><div class="port-type">Gym website with classes, shop & membership plans</div></div>
+    </div>
+    <!-- NEW: RemindCA -->
+    <div class="port-card" onclick="showPage('portfolio')">
+      <div class="port-thumb"><img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80" alt="RemindCA"><div class="port-label">Automation</div></div>
+      <div class="port-info"><div class="port-name">RemindCA — WhatsApp Deadline Bot</div><div class="port-type">Auto WhatsApp reminders for CA clients — GST, TDS & more</div></div>
+    </div>
+    <!-- AI Twin -->
+    <div class="port-card" onclick="showPage('portfolio')">
+      <div class="port-thumb"><img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&q=80" alt="AI Twin"><div class="port-label">AI · Personality</div></div>
+      <div class="port-info"><div class="port-name">AI Twin — Copy Your Personality</div><div class="port-type">AI that mirrors you with your own memories</div></div>
+    </div>
+    <!-- Perl -->
+    <div class="port-card" onclick="showPage('portfolio')">
+      <div class="port-thumb"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80" alt="Perl Phone"><div class="port-label">Mobile Website</div></div>
+      <div class="port-info"><div class="port-name">Perl — Mobile Device Website</div><div class="port-type">Next-gen phone product launch site</div></div>
+    </div>
+    <!-- AI Email -->
+    <div class="port-card" onclick="showPage('portfolio')">
+      <div class="port-thumb"><img src="https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=600&q=80" alt="AI Email"><div class="port-label">AI Automation</div></div>
+      <div class="port-info"><div class="port-name">AI Auto Email Reply System</div><div class="port-type">Reads emails & sends smart auto-replies automatically</div></div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:2.5rem;">
+    <button class="btn-primary" onclick="showPage('portfolio')" style="display:inline-flex;margin:0 auto;">View All Projects in Detail →</button>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="section-label">Packages</div>
+  <h2 class="section-title">Clear Pricing. No Surprises.</h2>
+  <p class="section-sub">All packages include mobile-first design, fast load times, and conversion-focused copy. Subscription plans include domain + hosting.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price"><sup>₹</sup>3,000</div>
+      <div class="plan-period">one-time · no domain</div>
+      <ul class="plan-feats">
+        <li class="plan-feat-item">3-page website</li>
+        <li class="plan-feat-item">Mobile responsive</li>
+        <li class="plan-feat-item">Contact form</li>
+        <li class="plan-feat-item">Basic SEO setup</li>
+        <li class="plan-feat-item">1 revision round</li>
+        <li class="plan-feat-item">Domain not included</li>
+      </ul>
+      <button class="btn-leather-ghost" onclick="openModal('Starter – ₹3,000')">Get Started</button>
+    </div>
+    <div class="price-card">
+      <div class="plan-name">Essential</div>
+      <div class="plan-price"><sup>₹</sup>14,999</div>
+      <div class="plan-period">one-time · no domain</div>
+      <ul class="plan-feats">
+        <li class="plan-feat-item">5-page website</li>
+        <li class="plan-feat-item">Mobile responsive</li>
+        <li class="plan-feat-item">Contact form + maps</li>
+        <li class="plan-feat-item">On-page SEO</li>
+        <li class="plan-feat-item">2 revision rounds</li>
+        <li class="plan-feat-item">Domain not included</li>
+      </ul>
+      <button class="btn-leather-ghost" onclick="openModal('Essential – ₹14,999')">Get Started</button>
+    </div>
+    <div class="price-card featured">
+      <div class="popular-badge">Most Popular</div>
+      <div class="plan-name">Growth</div>
+      <div class="plan-price"><sup>₹</sup>2,499<span style="font-size:1rem;font-weight:500;color:rgba(255,255,255,.6)">/mo</span></div>
+      <div class="plan-period">subscription · domain included</div>
+      <ul class="plan-feats">
+        <li class="plan-feat-item">10-page website</li>
+        <li class="plan-feat-item">Domain + hosting included</li>
+        <li class="plan-feat-item">Conversion copywriting</li>
+        <li class="plan-feat-item">Google Business setup</li>
+        <li class="plan-feat-item">Monthly updates</li>
+        <li class="plan-feat-item">Analytics + SEO reports</li>
+        <li class="plan-feat-item">Priority support</li>
+      </ul>
+      <button class="btn-gold" onclick="openModal('Growth – ₹2,499/mo')">Get Started</button>
+    </div>
+    <div class="price-card">
+      <div class="plan-name">Premium</div>
+      <div class="plan-price"><sup>₹</sup>4,999<span style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
+      <div class="plan-period">subscription · domain included</div>
+      <ul class="plan-feats">
+        <li class="plan-feat-item">Unlimited pages</li>
+        <li class="plan-feat-item">Domain + hosting included</li>
+        <li class="plan-feat-item">AI chatbot integration</li>
+        <li class="plan-feat-item">Workflow automations</li>
+        <li class="plan-feat-item">E-commerce / booking</li>
+        <li class="plan-feat-item">Unlimited revisions</li>
+        <li class="plan-feat-item">Dedicated support</li>
+      </ul>
+      <button class="btn-leather" onclick="openModal('Premium – ₹4,999/mo')">Get Started</button>
+    </div>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="section-label">Reviews</div>
+  <h2 class="section-title">What Clients Say</h2>
+  <p class="section-sub">Real feedback from real business owners. Leave your review below.</p>
+  <div class="reviews-layout">
+    <div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--leather3);margin-bottom:1rem;">Leave a Review</h3>
+      <div class="review-form">
+        <div class="stars-input" id="starInput">
+          <button class="star-btn" data-v="1">★</button>
+          <button class="star-btn" data-v="2">★</button>
+          <button class="star-btn" data-v="3">★</button>
+          <button class="star-btn" data-v="4">★</button>
+          <button class="star-btn" data-v="5">★</button>
+        </div>
+        <input class="rf-input" type="text" id="rName" placeholder="Your name">
+        <input class="rf-input" type="text" id="rBiz" placeholder="Your business (optional)">
+        <textarea class="rf-input" id="rText" rows="4" placeholder="Share your experience with SunSite..."></textarea>
+        <button class="btn-leather" onclick="submitReview()">Submit Review</button>
+        <p style="font-size:.78rem;color:var(--faint);margin-top:.5rem;">Saved permanently. Appears instantly on this page.</p>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--leather3);margin-bottom:1rem;">Client Reviews</h3>
+      <div id="reviewsList"><p class="no-reviews">No reviews yet — be the first!</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="section-label">FAQ</div>
+  <h2 class="section-title">Common Questions</h2>
+  <div class="faq-wrap">
+    <div class="faq-item"><button class="faq-q">How long does it take to build my website? <span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">Most websites are ready in 7–14 business days. Growth and Premium packages may take up to 21 days. Rush delivery available — just ask.</div></div></div>
+    <div class="faq-item"><button class="faq-q">What's the difference between one-time and subscription plans? <span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">One-time plans are a single payment — you own the site but manage domain/hosting yourself. Subscription plans include domain, hosting, monthly updates, and priority support.</div></div></div>
+    <div class="faq-item"><button class="faq-q">Do I need to provide content and images? <span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">Not necessarily. I write conversion-focused copy and source quality images. If you have your own photos or branding, send them over — I'll use them.</div></div></div>
+    <div class="faq-item"><button class="faq-q">What automations can you build for my business? <span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">Booking systems, WhatsApp/email follow-ups, lead capture bots, AI assistants, appointment reminders, review request flows, and more. If it's repetitive, I can automate it.</div></div></div>
+    <div class="faq-item"><button class="faq-q">Do you offer payment in instalments? <span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">Yes. One-time plans: 50% upfront, 50% on delivery. Subscription plans start with first month then renew monthly. No hidden fees.</div></div></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-label">Get in Touch</div>
+  <h2 class="section-title">Let's Build Something Together</h2>
+  <p class="section-sub">Fill in the form and I'll get back to you within 24 hours with a free consultation and rough quote.</p>
+  <div class="contact-grid">
+    <div class="contact-form-wrap">
+      <div class="form-row">
+        <input class="cf-input" type="text" id="cName" placeholder="Your Name">
+        <input class="cf-input" type="text" id="cBiz" placeholder="Business Name">
+      </div>
+      <input class="cf-input" type="email" id="cEmail" placeholder="Email Address">
+      <input class="cf-input" type="tel" id="cPhone" placeholder="Phone / WhatsApp">
+      <select class="cf-input" id="cPkg">
+        <option value="" disabled selected>What do you need?</option>
+        <option>Starter Website – ₹3,000</option>
+        <option>Essential Website – ₹14,999</option>
+        <option>Growth Plan – ₹2,499/mo (with domain)</option>
+        <option>Premium Plan – ₹4,999/mo (with domain)</option>
+        <option>Automations Only</option>
+        <option>Web + Automations Bundle</option>
+        <option>Redesign My Existing Site</option>
+        <option>Not sure – advise me</option>
+      </select>
+      <textarea class="cf-input" id="cMsg" rows="4" placeholder="Tell me about your business and what you need..."></textarea>
+      <button class="btn-leather" style="padding:.9rem;font-size:13px;" id="contactBtn" onclick="sendContactEmail()">Send Message →</button>
+      <div class="success-msg" id="cSuccess">✓ Message sent! Charls will reply within 24 hours. A confirmation is on its way to your inbox.</div>
+      <div class="error-msg" id="cError">⚠ Could not send automatically. Please email: <a href="mailto:mukeshwaran1560@gmail.com">mukeshwaran1560@gmail.com</a></div>
+      <p style="font-size:.78rem;color:var(--faint);">No spam. Free consultation. Reply in under 24 hrs.</p>
+    </div>
+    <div>
+      <div class="contact-item"><div class="contact-icon">📍</div><div><div class="contact-detail-title">Location</div><div class="contact-detail-val">Vellore, Tamil Nadu, India<br>Serving clients nationwide</div></div></div>
+      <div class="contact-item"><div class="contact-icon">📞</div><div><div class="contact-detail-title">Phone / WhatsApp</div><div class="contact-detail-val"><a href="tel:+919363472642">+91 93634 72642</a></div></div></div>
+      <div class="contact-item"><div class="contact-icon">📧</div><div><div class="contact-detail-title">Email</div><div class="contact-detail-val"><a href="mailto:mukeshwaran1560@gmail.com">mukeshwaran1560@gmail.com</a></div></div></div>
+      <div class="contact-item"><div class="contact-icon">⏱️</div><div><div class="contact-detail-title">Response Time</div><div class="contact-detail-val">Within 24 hours, Mon–Sat</div></div></div>
+      <div class="free-audit">
+        <div class="free-audit-title">Free Site Audit</div>
+        <p style="font-size:.85rem;color:var(--muted);line-height:1.75;">Already have a website? I'll review it for free and show you exactly what's costing you customers — no strings attached.</p>
+        <button class="btn-leather" style="margin-top:1rem;font-size:12px;" onclick="openModal('Free Site Audit Request')">Request Free Audit</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand"><span>Sun</span>Site — Charls, The Builder</div>
+  <div class="footer-copy">© 2025 SunSite. Built with purpose.</div>
+  <div class="footer-links">
+    <a onclick="navTo('home')">Home</a>
+    <a onclick="navTo('services')">Services</a>
+    <a onclick="showPage('portfolio')">Work</a>
+    <a onclick="navTo('contact')">Contact</a>
+  </div>
+</footer>
+</div><!-- end mainPage -->
+
+<!-- ===== PORTFOLIO PAGE ===== -->
+<div class="page" id="portfolioPage">
+<div class="port-page-hero">
+  <button class="port-back-btn" onclick="showPage('main')">← Back to Home</button>
+  <div class="port-page-title">My <span>Projects</span></div>
+  <p class="port-page-sub">Websites, AI systems, and automations built from scratch — real clients, real impact.</p>
+</div>
+
+<div class="port-projects-section">
+  <div class="port-section-label">Featured Work</div>
+
+  <!-- SAVEUR RESTAURANT -->
+  <div class="project-feature-card">
+    <div class="project-screenshots">
+      <img class="main-shot" id="saveurMain" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Saveur Restaurant">
+      <div class="thumb-row">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=300&q=80" onclick="setMain('saveurMain',this.src)" alt="Hero">
+        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=300&q=80" onclick="setMain('saveurMain',this.src)" alt="Interior">
+        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=300&q=80" onclick="setMain('saveurMain',this.src)" alt="Food">
+      </div>
+    </div>
+    <div class="project-info">
+      <div class="proj-tag">Restaurant Website</div>
+      <div class="proj-title">Saveur Restaurant & Bar</div>
+      <p class="proj-desc">A luxury fine-dining website for Saveur, Madurai. Dark gold aesthetic with full reservation system, animated hero, menu showcase, gallery, and contact. Built to reflect the elegance of the dining experience itself.</p>
+      <div class="proj-tech">
+        <span class="tech-tag">HTML/CSS/JS</span>
+        <span class="tech-tag">Reservation Form</span>
+        <span class="tech-tag">Gallery</span>
+        <span class="tech-tag">Dark Gold UI</span>
+      </div>
+      <button class="btn-leather" style="width:auto;padding:.7rem 1.5rem;" onclick="openModal('Similar Restaurant Website')">Build One Like This →</button>
+    </div>
+  </div>
+
+  <!-- FORGE GYM -->
+  <div class="project-feature-card" style="direction:rtl;">
+    <div class="project-screenshots" style="direction:ltr;">
+      <img class="main-shot" id="forgeMain" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80" alt="Forge Gym">
+      <div class="thumb-row">
+        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300&q=80" onclick="setMain('forgeMain',this.src)" alt="Gym">
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&q=80" onclick="setMain('forgeMain',this.src)" alt="Classes">
+        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=300&q=80" onclick="setMain('forgeMain',this.src)" alt="Equipment">
+      </div>
+    </div>
+    <div class="project-info" style="direction:ltr;">
+      <div class="proj-tag">Fitness Website</div>
+      <div class="proj-title">Forge Elite Fitness</div>
+      <p class="proj-desc">A high-energy gym website featuring class schedules with intensity ratings, trainer profiles, a full equipment shop with cart, and membership pricing. Bold dark red brutalist design built to convert visitors into members.</p>
+      <div class="proj-tech">
+        <span class="tech-tag">HTML/CSS/JS</span>
+        <span class="tech-tag">Shop + Cart</span>
+        <span class="tech-tag">Class Schedule</span>
+        <span class="tech-tag">Dark Red UI</span>
+      </div>
+      <button class="btn-leather" style="width:auto;padding:.7rem 1.5rem;" onclick="openModal('Similar Fitness/Gym Website')">Build One Like This →</button>
+    </div>
+  </div>
+
+  <!-- REMINDCA -->
+  <div class="project-feature-card">
+    <div class="project-screenshots">
+      <img class="main-shot" id="caMain" src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&q=80" alt="RemindCA">
+      <div class="thumb-row">
+        <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=300&q=80" onclick="setMain('caMain',this.src)" alt="Dashboard">
+        <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=300&q=80" onclick="setMain('caMain',this.src)" alt="WhatsApp">
+        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&q=80" onclick="setMain('caMain',this.src)" alt="Reports">
+      </div>
+    </div>
+    <div class="project-info">
+      <div class="proj-tag">WhatsApp Automation</div>
+      <div class="proj-title">RemindCA — Deadline Bot</div>
+      <p class="proj-desc">A WhatsApp automation system built for Chartered Accountants. Automatically sends personalized deadline reminders to all clients for GST Returns, GSTR-1, TDS Payments, and Advance Tax — in Tamil and English. Includes a dashboard to manage clients, bulk send, and view activity logs.</p>
+      <div class="proj-tech">
+        <span class="tech-tag">WhatsApp API</span>
+        <span class="tech-tag">Twilio</span>
+        <span class="tech-tag">Node.js</span>
+        <span class="tech-tag">Dashboard UI</span>
+        <span class="tech-tag">Bulk Messaging</span>
+      </div>
+      <button class="btn-leather" style="width:auto;padding:.7rem 1.5rem;" onclick="openModal('WhatsApp Automation System like RemindCA')">Build One Like This →</button>
+    </div>
+  </div>
+
+  <!-- AI TWIN -->
+  <div class="project-feature-card" style="direction:rtl;">
+    <div class="project-screenshots" style="direction:ltr;">
+      <img class="main-shot" id="twinMain" src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" alt="AI Twin">
+      <div class="thumb-row">
+        <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=300&q=80" onclick="setMain('twinMain',this.src)" alt="AI chat">
+        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=300&q=80" onclick="setMain('twinMain',this.src)" alt="Memory">
+        <img src="https://images.unsplash.com/photo-1655720033654-a4239dd42d10?w=300&q=80" onclick="setMain('twinMain',this.src)" alt="Interface">
+      </div>
+    </div>
+    <div class="project-info" style="direction:ltr;">
+      <div class="proj-tag">AI · Personality</div>
+      <div class="proj-title">AI Twin — Copy Your Personality</div>
+      <p class="proj-desc">An AI that learns your personality through memories you input and speaks exactly like you. Users type "Remember this: ..." to build the AI's knowledge, and others can chat with your digital twin — called "Captain". Built with a clean chat UI and persistent memory system.</p>
+      <div class="proj-tech">
+        <span class="tech-tag">Claude API</span>
+        <span class="tech-tag">Memory System</span>
+        <span class="tech-tag">Chat UI</span>
+        <span class="tech-tag">HTML/JS</span>
+      </div>
+      <button class="btn-leather" style="width:auto;padding:.7rem 1.5rem;" onclick="openModal('AI Twin / Personality System')">Build One Like This →</button>
+    </div>
+  </div>
+
+  <!-- PERL + AI EMAIL - smaller cards -->
+  <div class="port-section-label" style="margin-top:.5rem;">More Projects</div>
+  <div class="port-mini-grid">
+    <div class="port-mini-card">
+      <div class="port-mini-thumb"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80" alt="Perl"></div>
+      <div class="port-mini-info">
+        <div class="port-mini-name">Perl — Mobile Device Website</div>
+        <div class="port-mini-type">Dark futuristic product launch site with animated mascot, feature showcase & specs</div>
+        <button class="btn-leather-ghost" style="margin-top:.8rem;font-size:11px;padding:.5rem 1rem;" onclick="openModal('Product Website like Perl')">Enquire →</button>
+      </div>
+    </div>
+    <div class="port-mini-card">
+      <div class="port-mini-thumb"><img src="https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=600&q=80" alt="AI Email"></div>
+      <div class="port-mini-info">
+        <div class="port-mini-name">AI Auto Email Reply System</div>
+        <div class="port-mini-type">AI reads incoming emails and sends smart, contextual auto-replies — connected to Gmail</div>
+        <button class="btn-leather-ghost" style="margin-top:.8rem;font-size:11px;padding:.5rem 1rem;" onclick="openModal('AI Email Reply System')">Enquire →</button>
+      </div>
+    </div>
+    <div class="port-mini-card">
+      <div class="port-mini-thumb"><img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80" alt="E-Commerce"></div>
+      <div class="port-mini-info">
+        <div class="port-mini-name">Web Selling Website</div>
+        <div class="port-mini-type">Full e-commerce store with product listings, cart, checkout & order automation</div>
+        <button class="btn-leather-ghost" style="margin-top:.8rem;font-size:11px;padding:.5rem 1rem;" onclick="openModal('E-Commerce / Selling Website')">Enquire →</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:1rem 0 2rem;">
+    <button class="btn-primary" onclick="showPage('main');setTimeout(()=>navTo('contact'),100)" style="display:inline-flex;font-size:14px;padding:1rem 2.5rem;">Start Your Project with Charls →</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand"><span>Sun</span>Site — Charls, The Builder</div>
+  <div class="footer-copy">© 2025 SunSite. Built with purpose.</div>
+  <div class="footer-links">
+    <a onclick="showPage('main')">Home</a>
+    <a onclick="showPage('main');setTimeout(()=>navTo('contact'),100)">Contact</a>
+  </div>
+</footer>
+</div><!-- end portfolioPage -->
+
+<!-- PURCHASE MODAL -->
+<div id="purchaseModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
+  <div class="modal-inner">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div style="font-family:'Syne',sans-serif;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--leather);margin-bottom:.5rem;">Get Started</div>
+    <h3 id="modalTitle" style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--leather3);margin-bottom:.4rem;"></h3>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;">Fill in your details and Charls will get back to you within 24 hours.</p>
+    <input class="cf-input" type="text" id="mName" placeholder="Your Full Name" style="margin-bottom:.8rem;display:block;">
+    <input class="cf-input" type="email" id="mEmail" placeholder="Email Address" style="margin-bottom:.8rem;display:block;">
+    <input class="cf-input" type="tel" id="mPhone" placeholder="Phone / WhatsApp" style="margin-bottom:.8rem;display:block;">
+    <textarea class="cf-input" id="mMsg" rows="3" placeholder="Any specific requirements?" style="margin-bottom:1rem;display:block;resize:none;"></textarea>
+    <button class="btn-leather" id="modalBtn" style="padding:.9rem;font-size:13px;" onclick="sendPurchaseEmail()">Send Request →</button>
+    <div class="success-msg" id="mSuccess" style="margin-top:.8rem;">✓ Request sent! You'll receive a confirmation email. Charls will contact you within 24 hours.</div>
+    <div class="error-msg" id="mError" style="margin-top:.8rem;">⚠ Could not send. Please email: <a href="mailto:mukeshwaran1560@gmail.com">mukeshwaran1560@gmail.com</a></div>
+  </div>
+</div>
+
+<button class="sticky-cta-btn" onclick="navTo('contact')">Get a Free Quote ↗</button>
+
+<script>
+// ============================================================
+// EMAIL CONFIG — Replace these with your EmailJS credentials
+// See setup guide at the bottom of this file
+// ============================================================
+const EMAILJS_PUBLIC_KEY = 'svG1EUtr_sO1BmZGp';
+const EMAILJS_SERVICE_ID = 'service_3suqq4z';
+const EMAILJS_OWNER_TPL  = 'template_adturtl';
+const EMAILJS_CLIENT_TPL = 'template_2vvubpc';
+const OWNER_EMAIL = 'charlessdooley@gmail.com';
+
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
+// ---- PAGE SYSTEM ----
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById(p==='portfolio'?'portfolioPage':'mainPage').classList.add('active');
+  window.scrollTo(0,0);
+}
+function navTo(id){
+  showPage('main');
+  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});},60);
+}
+
+// ---- EMAILJS SEND ----
+async function doSend(ownerP,clientP,btnId,succId,errId){
+  const btn=document.getElementById(btnId);
+  btn.classList.add('btn-sending'); btn.textContent='Sending...';
+  try{
+    await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_OWNER_TPL,ownerP);
+    await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_CLIENT_TPL,clientP);
+    document.getElementById(succId).style.display='block';
+    document.getElementById(errId).style.display='none';
+    btn.textContent='✓ Sent!';
+    return true;
+  }catch(e){
+    // Fallback mailto
+    const s=encodeURIComponent('SunSite Enquiry — '+(ownerP.package||'General'));
+    const b=encodeURIComponent('Name: '+ownerP.from_name+'\nEmail: '+ownerP.from_email+'\nPhone: '+(ownerP.phone||'')+'\nPackage: '+(ownerP.package||'')+'\n\nMessage:\n'+(ownerP.message||''));
+    window.location.href='mailto:'+OWNER_EMAIL+'?subject='+s+'&body='+b;
+    document.getElementById(errId).style.display='block';
+    document.getElementById(succId).style.display='none';
+    btn.textContent='Send Request →'; btn.classList.remove('btn-sending');
+    return false;
+  }
+}
+
+// ---- CONTACT FORM ----
+async function sendContactEmail(){
+  const name=document.getElementById('cName').value.trim();
+  const biz=document.getElementById('cBiz').value.trim();
+  const email=document.getElementById('cEmail').value.trim();
+  const phone=document.getElementById('cPhone').value.trim();
+  const pkg=document.getElementById('cPkg').value;
+  const msg=document.getElementById('cMsg').value.trim();
+  if(!name||!email||!msg){alert('Please fill in your name, email, and message.');return;}
+  if(!email.includes('@')){alert('Please enter a valid email.');return;}
+  const sent=await doSend(
+    {from_name:name+(biz?' ('+biz+')':''),from_email:email,phone,package:pkg||'Not specified',message:msg},
+    {to_name:name,to_email:email,package:pkg||'your enquiry'},
+    'contactBtn','cSuccess','cError'
+  );
+  if(sent){['cName','cBiz','cEmail','cPhone','cMsg'].forEach(id=>document.getElementById(id).value='');}
+}
+
+// ---- MODAL ----
+let _plan='';
+function openModal(plan){
+  _plan=plan;
+  document.getElementById('modalTitle').textContent=plan;
+  document.getElementById('mSuccess').style.display='none';
+  document.getElementById('mError').style.display='none';
+  document.getElementById('modalBtn').textContent='Send Request →';
+  document.getElementById('modalBtn').classList.remove('btn-sending');
+  document.getElementById('purchaseModal').style.display='flex';
+}
+function closeModal(){document.getElementById('purchaseModal').style.display='none';}
+document.getElementById('purchaseModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+async function sendPurchaseEmail(){
+  const name=document.getElementById('mName').value.trim();
+  const email=document.getElementById('mEmail').value.trim();
+  const phone=document.getElementById('mPhone').value.trim();
+  const msg=document.getElementById('mMsg').value.trim();
+  if(!name||!email){alert('Please enter your name and email.');return;}
+  if(!email.includes('@')){alert('Please enter a valid email.');return;}
+  const sent=await doSend(
+    {from_name:name,from_email:email,phone,package:_plan,message:msg||'No additional message.'},
+    {to_name:name,to_email:email,package:_plan},
+    'modalBtn','mSuccess','mError'
+  );
+  if(sent){['mName','mEmail','mPhone','mMsg'].forEach(id=>document.getElementById(id).value='');}
+}
+
+// ---- REVIEWS (localStorage) ----
+let stars=0;
+let reviews=[];
+try{const s=localStorage.getItem('sunsite_reviews');if(s)reviews=JSON.parse(s);}catch(e){}
+
+document.querySelectorAll('.star-btn').forEach(btn=>{
+  btn.addEventListener('mouseover',()=>{const v=+btn.dataset.v;document.querySelectorAll('.star-btn').forEach(b=>b.classList.toggle('active',+b.dataset.v<=v));});
+  btn.addEventListener('mouseout',()=>{document.querySelectorAll('.star-btn').forEach(b=>b.classList.toggle('active',+b.dataset.v<=stars));});
+  btn.addEventListener('click',()=>{stars=+btn.dataset.v;document.querySelectorAll('.star-btn').forEach(b=>b.classList.toggle('active',+b.dataset.v<=stars));});
+});
+
+function submitReview(){
+  const name=document.getElementById('rName').value.trim();
+  const biz=document.getElementById('rBiz').value.trim();
+  const text=document.getElementById('rText').value.trim();
+  if(!name||!text||stars===0){alert('Please fill your name, review, and select a star rating.');return;}
+  reviews.unshift({name,biz,text,stars,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})});
+  try{localStorage.setItem('sunsite_reviews',JSON.stringify(reviews));}catch(e){}
+  document.getElementById('rName').value='';
+  document.getElementById('rBiz').value='';
+  document.getElementById('rText').value='';
+  stars=0;
+  document.querySelectorAll('.star-btn').forEach(b=>b.classList.remove('active'));
+  renderReviews();
+}
+
+function renderReviews(){
+  const el=document.getElementById('reviewsList');
+  if(!reviews.length){el.innerHTML='<p class="no-reviews">No reviews yet — be the first!</p>';return;}
+  el.innerHTML=reviews.map(r=>`
+    <div class="review-card">
+      <div class="r-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+      <div class="r-quote">"${r.text}"</div>
+      <div class="r-author">${r.name}</div>
+      ${r.biz?`<div class="r-biz">${r.biz}</div>`:''}
+      ${r.date?`<div class="r-biz">${r.date}</div>`:''}
+    </div>
+  `).join('');
+}
+renderReviews();
+
+// ---- FAQ ----
+document.querySelectorAll('.faq-item').forEach(item=>{
+  item.querySelector('.faq-q').addEventListener('click',()=>{
+    const open=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!open)item.classList.add('open');
+  });
+});
+
+// ---- PORTFOLIO THUMBNAILS ----
+function setMain(id,src){document.getElementById(id).src=src;}
+</script>
+
+<!--
+=== HOW TO ENABLE EMAIL SENDING (FREE - 5 min setup) ===
+
+1. Go to https://www.emailjs.com/ and sign up (free)
+2. "Email Services" → "Add New Service" → Gmail → Authorize mukeshwaran1560@gmail.com → Copy Service ID
+
+3. "Email Templates" → "Create New Template" (create TWO templates):
+
+TEMPLATE 1 — Owner Notification (notifies you):
+  To: mukeshwaran1560@gmail.com
+  Subject: New SunSite Enquiry — {{package}}
+  Body:
+    Name: {{from_name}}
+    Email: {{from_email}}
+    Phone: {{phone}}
+    Package: {{package}}
+    Message: {{message}}
+
+TEMPLATE 2 — Client Auto-Reply (confirms to customer):
+  To: {{to_email}}
+  Subject: Got your request! — SunSite by Charls
+  Body:
+    Hi {{to_name}},
+    Thanks for reaching out about {{package}}!
+    I've received your message and will reply within 24 hours.
+    — Charls (Mukeshwaran), SunSite
+
+4. Account → API Keys → Copy Public Key
+5. Replace the 4 values at the top of the script:
+   EMAILJS_PUBLIC_KEY = 'your_key'
+   EMAILJS_SERVICE_ID = 'your_service_id'
+   EMAILJS_OWNER_TPL  = 'template_id_1'
+   EMAILJS_CLIENT_TPL = 'template_id_2'
+
+Done! All buttons (Get Started, Get a Quote, Contact form) will send you
+an email AND auto-reply to the customer.
+-->
+</html>

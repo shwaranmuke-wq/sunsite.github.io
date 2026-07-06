@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Works — SunSite · Charls, The Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#fdf6ee;--cream2:#f5ebe0;--cream3:#ede0d4;
+  --leather:#8b5e3c;--leather2:#6b4226;--leather3:#4a2e1a;
+  --gold:#c8923a;--gold2:#e8b860;
+  --sky:#0EA5E9;--sky2:#38BDF8;
+  --ink:#1a0f08;--muted:#7a5c42;--faint:#b09070;
+  --rim:rgba(139,94,60,0.15);--rim2:rgba(139,94,60,0.3);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:'Syne',sans-serif;line-height:1.15;}
+a{color:inherit;text-decoration:none;}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(253,246,238,0.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--rim);}
+.nav-logo{display:flex;align-items:center;gap:8px;}
+.nav-logo svg{width:34px;height:34px;}
+.nav-brand{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--leather2);}
+.nav-brand span{color:var(--sky);}
+.nav-links{display:flex;gap:2rem;}
+.nav-links a{font-size:13px;letter-spacing:.4px;color:var(--muted);text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--leather2);}
+.nav-cta{background:var(--leather2);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;padding:.55rem 1.3rem;border-radius:6px;transition:background .2s;text-transform:uppercase;cursor:pointer;border:none;}
+.nav-cta:hover{background:var(--leather3);}
+
+/* HERO */
+.works-hero{padding:6rem 3rem 3rem;background:var(--leather3);position:relative;overflow:hidden;}
+.works-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(14,165,233,0.12) 0%,transparent 60%);}
+.works-hero-content{position:relative;z-index:1;max-width:700px;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.5px;text-transform:uppercase;margin-bottom:2rem;transition:color .2s;cursor:pointer;}
+.back-btn:hover{color:var(--gold2);}
+.works-hero h1{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:800;letter-spacing:-2px;color:#fff;margin-bottom:1rem;}
+.works-hero h1 span{color:var(--sky2);}
+.works-hero p{color:rgba(255,255,255,.65);font-size:1rem;max-width:520px;line-height:1.85;}
+
+/* GUIDE SECTION */
+.guide-section{padding:5rem 3rem;background:var(--cream2);}
+.section-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--leather);font-weight:600;margin-bottom:.8rem;}
+.section-label::before{content:'';display:block;width:20px;height:1px;background:var(--leather);}
+.section-title{font-size:clamp(1.8rem,3.5vw,2.7rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem;color:var(--leather3);}
+.section-sub{font-size:.95rem;color:var(--muted);max-width:520px;line-height:1.85;margin-bottom:3rem;}
+
+.guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.guide-card{background:#fff;border:1px solid var(--rim);border-radius:16px;padding:2rem;position:relative;transition:all .3s;}
+.guide-card:hover{border-color:var(--leather);transform:translateY(-4px);}
+.guide-num{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--cream3);line-height:1;margin-bottom:1rem;}
+.guide-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--leather3);margin-bottom:.6rem;}
+.guide-text{font-size:.85rem;color:var(--muted);line-height:1.75;}
+.guide-tag{display:inline-block;background:var(--sky);color:#fff;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:.2rem .7rem;border-radius:100px;margin-top:1rem;}
+
+/* PROJECTS */
+.projects-section{padding:5rem 3rem;background:var(--cream);}
+.projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:3rem;}
+.project-card{background:#fff;border:1px solid var(--rim);border-radius:20px;overflow:hidden;transition:all .3s;}
+.project-card:hover{border-color:var(--leather);transform:translateY(-5px);box-shadow:0 20px 60px rgba(74,46,26,.1);}
+.project-card.large{grid-column:span 2;}
+.project-media{width:100%;height:280px;overflow:hidden;position:relative;background:var(--cream3);}
+.project-card.large .project-media{height:360px;}
+.project-media img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .5s;}
+.project-card:hover .project-media img{transform:scale(1.04);}
+.project-media-gallery{display:grid;grid-template-columns:1fr 1fr 1fr;height:100%;gap:2px;}
+.project-media-gallery img{width:100%;height:100%;object-fit:cover;}
+.project-badge{position:absolute;top:12px;left:12px;background:rgba(74,46,26,.85);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:.25rem .7rem;border-radius:100px;}
+.project-body{padding:1.8rem;}
+.project-type{font-size:.78rem;color:var(--sky);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:.4rem;}
+.project-name{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--leather3);margin-bottom:.6rem;}
+.project-desc{font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:1.2rem;}
+.project-tags{display:flex;flex-wrap:wrap;gap:.4rem;}
+.tag{background:var(--cream2);border:1px solid var(--rim);color:var(--leather);font-size:11px;padding:.2rem .7rem;border-radius:100px;}
+
+/* DEMO SCREENSHOTS GALLERY */
+.gallery-section{padding:5rem 3rem;background:var(--cream2);}
+.screenshots-grid{columns:3;gap:1rem;margin-top:2rem;}
+.screenshot-item{break-inside:avoid;margin-bottom:1rem;border-radius:12px;overflow:hidden;border:1px solid var(--rim);transition:transform .3s;}
+.screenshot-item:hover{transform:scale(1.02);}
+.screenshot-item img{width:100%;display:block;}
+
+/* CTA */
+.works-cta{padding:5rem 3rem;background:var(--leather3);text-align:center;position:relative;overflow:hidden;}
+.works-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(14,165,233,0.15) 0%,transparent 60%);}
+.works-cta h2{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:1rem;position:relative;}
+.works-cta p{color:rgba(255,255,255,.6);max-width:480px;margin:0 auto 2.5rem;position:relative;}
+.btn-sky{background:var(--sky);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:.3px;padding:.9rem 2.2rem;border-radius:8px;border:none;cursor:pointer;transition:all .2s;display:inline-block;position:relative;}
+.btn-sky:hover{background:var(--sky2);color:#000;transform:translateY(-2px);}
+
+footer{background:var(--leather3);padding:2rem 3rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,.07);}
+.footer-brand{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:#fff;}
+.footer-brand span{color:var(--sky2);}
+.footer-copy{font-size:.78rem;color:rgba(255,255,255,.4);}
+.footer-links{display:flex;gap:1.5rem;}
+.footer-links a{font-size:.78rem;color:rgba(255,255,255,.5);transition:color .2s;}
+.footer-links a:hover{color:var(--gold2);}
+
+@media(max-width:768px){
+  .guide-grid{grid-template-columns:1fr;}
+  .projects-grid{grid-template-columns:1fr;}
+  .project-card.large{grid-column:span 1;}
+  .screenshots-grid{columns:1;}
+  nav{padding:1rem 1.5rem;}
+  .works-hero,.guide-section,.projects-section,.gallery-section,.works-cta{padding:4rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(200,200)">
+        <polygon points="0,-100 87,-50 87,50 0,100 -87,50 -87,-50" fill="#0EA5E9"/>
+        <polygon points="0,-85 74,-42 74,42 0,85 -74,42 -74,-42" fill="none" stroke="#38BDF8" stroke-width="2.5" opacity="0.4"/>
+        <text x="0" y="32" text-anchor="middle" font-size="100" font-weight="700" fill="#ffffff" font-family="Arial">S</text>
+        <circle cx="47" cy="-47" r="18" fill="#FCD34D"/>
+        <line x1="47" y1="-69" x2="47" y2="-76" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+        <line x1="47" y1="-25" x2="47" y2="-18" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+        <line x1="69" y1="-47" x2="76" y2="-47" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+        <line x1="25" y1="-47" x2="18" y2="-47" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <div class="nav-brand"><span>Sun</span>Site</div>
+  </div>
+  <div class="nav-links">
+    <a href="sunsite_v5.html#about">About</a>
+    <a href="sunsite_v5.html#services">Services</a>
+    <a href="sunsite_v5.html#pricing">Pricing</a>
+    <a href="sunsite_v5.html#contact">Contact</a>
+  </div>
+  <button class="nav-cta" onclick="window.location.href='sunsite_v5.html#contact'">Get a Quote</button>
+</nav>
+
+<!-- HERO -->
+<div class="works-hero">
+  <div class="works-hero-content">
+    <a class="back-btn" href="sunsite_v5.html">← Back to Home</a>
+    <h1>Projects That <span>Work</span> in the Real World</h1>
+    <p>Every project here was built to solve a real problem — AI systems, smart websites, and automations that actually deliver results. Here's how I think and what I've built.</p>
+  </div>
+</div>
+
+<!-- HOW I WORK GUIDE -->
+<section class="guide-section">
+  <div class="section-label">The Process</div>
+  <h2 class="section-title">How I Build Things That Work</h2>
+  <p class="section-sub">I don't just build pretty pages — I build systems designed to convert, automate, and grow.</p>
+  <div class="guide-grid">
+    <div class="guide-card">
+      <div class="guide-num">01</div>
+      <div class="guide-title">Understand the Problem First</div>
+      <div class="guide-text">Every project starts with a clear question: what is costing this business time or money? The solution follows from the problem — never the other way around.</div>
+      <span class="guide-tag">Discovery</span>
+    </div>
+    <div class="guide-card">
+      <div class="guide-num">02</div>
+      <div class="guide-title">Design for Conversion, Not Just Looks</div>
+      <div class="guide-text">Great design serves a goal. Every layout choice, every headline, every CTA button is positioned to guide the visitor toward taking action — not just to look good.</div>
+      <span class="guide-tag">Strategy</span>
+    </div>
+    <div class="guide-card">
+      <div class="guide-num">03</div>
+      <div class="guide-title">Build Clean, Fast & Mobile-First</div>
+      <div class="guide-text">80% of your customers are on mobile. Speed matters. I write lean code that loads fast, works everywhere, and never crashes when you need it most.</div>
+      <span class="guide-tag">Build</span>
+    </div>
+    <div class="guide-card">
+      <div class="guide-num">04</div>
+      <div class="guide-title">Wire in Automations & AI</div>
+      <div class="guide-text">The site goes live — then I connect the automations. Auto-replies, lead capture, booking flows, and AI assistants so the business works even when you're offline.</div>
+      <span class="guide-tag">Automation</span>
+    </div>
+    <div class="guide-card">
+      <div class="guide-num">05</div>
+      <div class="guide-title">Test, Refine, Deliver</div>
+      <div class="guide-text">Before anything goes live, I test on real devices, real browsers, and walk through the full customer journey myself. No bugs, no surprises.</div>
+      <span class="guide-tag">QA</span>
+    </div>
+    <div class="guide-card">
+      <div class="guide-num">06</div>
+      <div class="guide-title">Support That Doesn't Disappear</div>
+      <div class="guide-text">After delivery, I'm reachable. Updates, tweaks, new features — I stay close so the system keeps performing as your business grows.</div>
+      <span class="guide-tag">Support</span>
+    </div>
+  </div>
+</section>
+
+<!-- REAL PROJECTS -->
+<section class="projects-section">
+  <div class="section-label">Portfolio</div>
+  <h2 class="section-title">Projects I've Built</h2>
+  <p class="section-sub">Real projects — AI systems, websites, and tools that solve actual problems.</p>
+
+  <div class="projects-grid">
+
+    <!-- AI Twin - LARGE CARD -->
+    <div class="project-card large">
+      <div class="project-media">
+        <div class="project-media-gallery">
+          <img src="Screenshot 2026-04-29 110711.png" alt="AI Twin Chat 1">
+          <img src="Screenshot 2026-04-29 110749.png" alt="AI Twin Chat 2">
+          <img src="Screenshot 2026-04-29 110818.png" alt="AI Twin Chat 3">
+        </div>
+        <div class="project-badge">AI System</div>
+      </div>
+      <div class="project-body">
+        <div class="project-type">AI · Personality Clone · Memory Engine</div>
+        <div class="project-name">AI Twin — TWIN AI M1 "Captain"</div>
+        <div class="project-desc">An AI that copies your personality and holds the memories you feed it. Users can chat with "Captain" — an AI trained on Mukeshwaran's personal memories, mannerisms, and knowledge. It remembers what you tell it and responds in his voice. Built for personal branding, entertainment, and client engagement.</div>
+        <div class="project-tags">
+          <span class="tag">AI</span>
+          <span class="tag">Personality Engine</span>
+          <span class="tag">Memory System</span>
+          <span class="tag">Chat Interface</span>
+          <span class="tag">Claude API</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Perl Mobile Website -->
+    <div class="project-card">
+      <div class="project-media">
+        <img src="Screenshot 2026-04-29 111436.png" alt="Perl Website">
+        <div class="project-badge">Web Design</div>
+      </div>
+      <div class="project-body">
+        <div class="project-type">Mobile Device · Landing Page · Dark Theme</div>
+        <div class="project-name">Perl — Next-Gen Mobile Experience</div>
+        <div class="project-desc">A cinematic dark-themed product website for a fictional next-gen mobile device. Features an animated character guide, fun mode toggle, spec breakdowns, and a full review system. Built to demonstrate high-end product marketing design.</div>
+        <div class="project-tags">
+          <span class="tag">Product Site</span>
+          <span class="tag">Dark UI</span>
+          <span class="tag">Animations</span>
+          <span class="tag">HTML/CSS/JS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Perl Page 2 -->
+    <div class="project-card">
+      <div class="project-media">
+        <img src="Screenshot 2026-04-29 111445.png" alt="Perl Core Experience">
+        <div class="project-badge">Web Design</div>
+      </div>
+      <div class="project-body">
+        <div class="project-type">Feature Page · Specs · Grid Layout</div>
+        <div class="project-name">Perl — Core Experience Specs Page</div>
+        <div class="project-desc">The feature breakdown page of the Perl site — showcasing 6 flagship specs in a glowing grid layout with neon accents, custom icons, and editorial copy. Demonstrates product storytelling through design.</div>
+        <div class="project-tags">
+          <span class="tag">Product Design</span>
+          <span class="tag">Grid Layout</span>
+          <span class="tag">Neon UI</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Auto Email Reply -->
+    <div class="project-card">
+      <div class="project-media">
+        <img src="https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800&q=80" alt="AI Email Automation">
+        <div class="project-badge">AI Automation</div>
+      </div>
+      <div class="project-body">
+        <div class="project-type">AI · Email Automation · Business Tool</div>
+        <div class="project-name">AI Auto Email Reply System</div>
+        <div class="project-desc">A smart email automation system that reads incoming customer emails and sends intelligent, personalised replies automatically. Reduces response time from hours to seconds and ensures no customer inquiry is ever missed.</div>
+        <div class="project-tags">
+          <span class="tag">AI</span>
+          <span class="tag">Email Automation</span>
+          <span class="tag">24/7 Replies</span>
+          <span class="tag">Lead Capture</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Web Selling Website -->
+    <div class="project-card">
+      <div class="project-media">
+        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" alt="E-Commerce Website">
+        <div class="project-badge">E-Commerce</div>
+      </div>
+      <div class="project-body">
+        <div class="project-type">E-Commerce · Sales · Conversion Funnel</div>
+        <div class="project-name">Web Selling Website</div>
+        <div class="project-desc">A full e-commerce selling website designed for maximum conversions — product listings, cart, checkout, order confirmation, and automated order-follow-up emails. Built to turn visitors into buyers reliably.</div>
+        <div class="project-tags">
+          <span class="tag">E-Commerce</span>
+          <span class="tag">Sales Funnel</span>
+          <span class="tag">Order Automation</span>
+          <span class="tag">Conversion Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SunSite itself -->
+    <div class="project-card">
+      <div class="project-media">
+        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" alt="SunSite Portfolio">
+        <div class="project-badge">Portfolio Site</div>
+      </div>
+      <div class="project-body">
+        <div class="project-type">Portfolio Site · Automation · Lead Gen</div>
+        <div class="project-name">SunSite — Personal Portfolio & Lead System</div>
+        <div class="project-desc">The site you're looking at right now. A conversion-focused portfolio with automated lead capture, email notifications on every enquiry, auto-reply to clients, persistent reviews, and a full pricing system. Built from scratch to win clients.</div>
+        <div class="project-tags">
+          <span class="tag">Portfolio</span>
+          <span class="tag">Lead Gen</span>
+          <span class="tag">Auto-Replies</span>
+          <span class="tag">Email Integration</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="works-cta">
+  <h2>Want Something Like This Built for You?</h2>
+  <p>Whether it's a website, an AI system, or a full automation — let's talk about what your business actually needs.</p>
+  <button class="btn-sky" onclick="window.location.href='sunsite_v5.html#contact'">Start a Project with Me →</button>
+</section>
+
+<footer>
+  <div class="footer-brand"><span>Sun</span>Site — Charls, The Builder</div>
+  <div class="footer-copy">© 2025 SunSite. Built with purpose.</div>
+  <div class="footer-links">
+    <a href="sunsite_v5.html">Home</a>
+    <a href="sunsite_v5.html#pricing">Pricing</a>
+    <a href="sunsite_v5.html#contact">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
